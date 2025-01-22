@@ -21,16 +21,12 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      # - name: Setup Node.js ⚙️ - Cache dependencies ⚡ - Install dependencies 🔧
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 18
-      #     cache: 'yarn'
-      - name: Setup Node.js for Frontend
-        uses: ./.github/workflows/setup-node
+      - name: Setup Node.js ⚙️ - Cache dependencies ⚡ - Install dependencies 🔧
+        uses: actions/setup-node@v3
         with:
-          path: frontend
-          
+          node-version: 18
+          cache: 'yarn'
+
       - name: Create .env file with secrets 🔐
         run: |
           echo NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.NEXT_PUBLIC_ALCHEMY_API_KEY }} >> frontend/.env
