@@ -14,6 +14,7 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: 20
+        cache: 'yarn'
 
     - name: Cache dependencies ⚡
       id: cache_dependencies
