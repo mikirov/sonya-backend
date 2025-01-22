@@ -35,6 +35,8 @@ export class InputController {
   })
   @ApiBody({ type: ProcessInputDto })
   async processInput(@Body() processInputDto: ProcessInputDto): Promise<any> {
+
+    this.logger.log('Processing input:', processInputDto);
     const { input } = processInputDto;
     const agentUrl = process.env.AGENT_URL;
     const agentId = process.env.AGENT_ID;
