@@ -46,27 +46,19 @@ export const SonyaCharacter: React.FC<SonyaCharacterProps> = ({ walletAddress })
         <div className="mb-8">
           {videoUrl ? (
             // Display video if videoUrl is available
-            <video
-              className="w-full max-h-[400px] rounded-lg shadow-md"
-              controls
-              src={videoUrl}
-            >
+            <video className="w-full max-h-[400px] rounded-lg shadow-md" controls src={videoUrl}>
               Your browser does not support the video tag.
             </video>
           ) : (
             // Display the Sonya image from the public folder
-            <img
-              className="w-full max-h-[400px] rounded-lg shadow-md object-cover"
-              src="/sonya.png"
-              alt="Sonya"
-            />
+            <img className="w-full max-h-[400px] rounded-lg shadow-md object-cover" src="/sonya.png" alt="Sonya" />
           )}
         </div>
         <textarea
           className="w-full h-40 p-4 text-lg border rounded-md shadow-md bg-[#FFF8E6] border-[#FFDBAC] text-[#5F370E]"
           placeholder="Hello. How are you feeling today?"
           value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
+          onChange={e => setUserInput(e.target.value)}
         />
         <div className="flex justify-center mt-4">
           <button

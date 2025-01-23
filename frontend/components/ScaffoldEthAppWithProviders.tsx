@@ -11,14 +11,14 @@ import axiosInstance, { setAuthToken } from "~~/utils/axiosInstance"; // Import 
 import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
+// import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { SonyaCharacter } from "~~/components/SonyaCharacter";
 
 const TOKEN_EXPIRY_TIME = 60 * 60 * 1000; // 60 minutes in milliseconds
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
-  useInitializeNativeCurrencyPrice();
+  // useInitializeNativeCurrencyPrice();
 
   const { address } = useAccount();
   const { signMessageAsync } = useSignMessage();

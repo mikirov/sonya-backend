@@ -47,40 +47,6 @@ export class InputController {
       );
     }
 
-    try {
-      // Create URL-encoded body
-      // const urlEncodedBody = new URLSearchParams();
-      // urlEncodedBody.append('text', input);
-
-      // Request the audio from the agent's speak endpoint using fetch
-      let audioBuffer;
-      try {
-        const audioResponse = await fetch(`${agentUrl}/${agentId}/speak`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'audio/mpeg',
-            'Accept-Encoding': 'gzip, deflate, br',
-            Connection: 'keep-alive',
-          },
-          body: JSON.stringify({ text: input }),
-        });
-
-        this.logger.log(audioResponse);
-
-        if (!audioResponse.ok) {
-          throw new InternalServerErrorException(
-            `Failed to process audio. Status: ${audioResponse.status}`,
-          );
-        }
-
-        audioBuffer = await audioResponse.arrayBuffer();
-
-        this.logger.log('Audio response received.');
-      } catch (e) {
-        console.error(e);
-      }
-
       // Forward the input to the agent's message endpoint using fetch
       let responseText;
 
@@ -111,6 +77,37 @@ export class InputController {
       }
 
       this.logger.log('Message response:', responseText);
+
+      try {
+        // Create URL-encoded body
+        // const urlEncodedBody = new URLSearchParams();
+        // urlEncodedBody.append('text', input);
+  
+        // Request the audio from the agent's speak endpoint using fetch
+        let audioBuffer;
+        try {
+          const audioResponse = await fetch(`${agentUrl}/${agentId}/tts`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: input }),
+          });
+  
+          this.logger.log(audioResponse);
+  
+          if (!audioResponse.ok) {
+            throw new InternalServerErrorException(
+              `Failed to process audio. Status: ${audioResponse.status}`,
+            );
+          }
+  
+          audioBuffer = await audioResponse.arrayBuffer();
+  
+          this.logger.log('Audio response received.');
+        } catch (e) {
+          console.error(e);
+        }
 
       // Return both the text and audio data
       return {

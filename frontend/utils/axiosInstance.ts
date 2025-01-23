@@ -5,10 +5,10 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  maxBodyLength: Infinity, // Allow large responses
-  maxContentLength: Infinity, // Allow large content
-  httpAgent: new (require('http').Agent)({ keepAlive: true, insecureHTTPParser: true }),
-  httpsAgent: new (require('https').Agent)({ keepAlive: true, insecureHTTPParser: true }),
+  // maxBodyLength: Infinity, // Allow large responses
+  // maxContentLength: Infinity, // Allow large content
+  // httpAgent: new (require('http').Agent)({ keepAlive: true, insecureHTTPParser: true }),
+  // httpsAgent: new (require('https').Agent)({ keepAlive: true, insecureHTTPParser: true }),
 });
 
 // Add a method to set the Authorization token dynamically
