@@ -13,13 +13,13 @@ import { ProcessInputDto } from '../dto/process-input.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @ApiTags('Input')
-@Controller('input')
+@Controller('sonya')
 export class InputController {
   private readonly logger = new Logger(InputController.name);
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Post('process-input')
+  @Post('process')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: 200,

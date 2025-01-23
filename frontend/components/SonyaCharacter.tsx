@@ -19,7 +19,7 @@ export const SonyaCharacter: React.FC<SonyaCharacterProps> = ({ walletAddress })
 
     try {
       // Send user input and walletAddress to the agent endpoint
-      const apiResponse = await axiosInstance.post(`input/process-input`, {
+      const apiResponse = await axiosInstance.post(`sonya/process`, {
         input: userInput,
         walletAddress, // Include wallet address in the payload
       });

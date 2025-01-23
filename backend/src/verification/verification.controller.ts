@@ -11,11 +11,11 @@ import { VerifyMessageDto } from '../dto/verify-message.dto';
 import { VerificationService } from './verification.service';
 
 @ApiTags('Verification')
-@Controller('verify')
+@Controller('sonya')
 export class VerificationController {
   constructor(private readonly verificationService: VerificationService) {}
 
-  @Post()
+  @Post('verify')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: 200,

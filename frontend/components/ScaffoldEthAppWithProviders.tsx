@@ -64,7 +64,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       const signature = await signMessageAsync({ message });
 
       // Use the Axios singleton to send the signed message to the backend
-      const response = await axiosInstance.post("/verify", {
+      const response = await axiosInstance.post("/sonya/verify", {
         walletAddress: address,
         signature,
       });
