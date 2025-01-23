@@ -35,7 +35,6 @@ export class InputController {
   })
   @ApiBody({ type: ProcessInputDto })
   async processInput(@Body() processInputDto: ProcessInputDto): Promise<any> {
-
     this.logger.log('Processing input:', processInputDto);
     const { input } = processInputDto;
     const agentUrl = process.env.AGENT_URL;
@@ -47,85 +46,69 @@ export class InputController {
       );
     }
 
-      // Forward the input to the agent's message endpoint using fetch
-      let responseText;
+    let responseText: string;
+    let audioStream: Buffer;
 
-      try {
-        const messageResponse = await fetch(`${agentUrl}/${agentId}/message`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ text: input }),
-        });
+    try {
+      // Step 1: Forward the input to the agent's message endpoint
+      const messageResponse = await fetch(`${agentUrl}/${agentId}/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: input }),
+      });
 
-        if (!messageResponse.ok) {
-          throw new InternalServerErrorException(
-            `Failed to process message. Status: ${messageResponse.status}`,
-          );
-        }
+      if (!messageResponse.ok) {
+        throw new InternalServerErrorException(
+          `Failed to process message. Status: ${messageResponse.status}`,
+        );
+      }
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const messageData: any = await messageResponse.json();
-        this.logger.log('Message response:', messageData);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-        responseText = messageData[0]?.text;
+      const messageData: any = await messageResponse.json();
+      responseText = messageData[0]?.text;
 
-        this.logger.log('Message response:', responseText);
-      } catch (e) {
-        console.error(e);
+      if (!responseText) {
+        throw new InternalServerErrorException('No text response received.');
       }
 
       this.logger.log('Message response:', responseText);
 
-      try {
-        // Create URL-encoded body
-        // const urlEncodedBody = new URLSearchParams();
-        // urlEncodedBody.append('text', input);
-  
-        // Request the audio from the agent's speak endpoint using fetch
-        let audioBuffer;
-        try {
-          const audioResponse = await fetch(`${agentUrl}/${agentId}/tts`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: input }),
-          });
-  
-          this.logger.log(audioResponse);
-  
-          if (!audioResponse.ok) {
-            throw new InternalServerErrorException(
-              `Failed to process audio. Status: ${audioResponse.status}`,
-            );
-          }
-  
-          audioBuffer = await audioResponse.arrayBuffer();
-  
-          this.logger.log('Audio response received.');
-        } catch (e) {
-          console.error(e);
-        }
+      // // Step 2: Fetch the audio from the tts endpoint
+      // const audioResponse = await fetch(`${agentUrl}/${agentId}/tts`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ text: responseText }),
+      // });
 
-      // Return both the text and audio data
+      // if (!audioResponse.ok) {
+      //   throw new InternalServerErrorException(
+      //     `Failed to process audio. Status: ${audioResponse.status}`,
+      //   );
+      // }
+
+      // if(!audioResponse.body) {
+      //   throw new InternalServerErrorException('No audio response received.');
+      // }
+
+      // // Stream audio response into a Buffer
+      // const chunks: any[] = [];
+      // for await (const chunk of audioResponse.body) {
+      //   chunks.push(chunk);
+      // }
+      // audioStream = Buffer.concat(chunks);
+
+      // this.logger.log('Audio response received.');
+
+      // Step 3: Return the text and audio response
       return {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         response: responseText,
-        audio: audioBuffer
-          ? `data:audio/mpeg;base64,${Buffer.from(audioBuffer).toString(
-              'base64',
-            )}`
-          : null,
+        // audio: `data:audio/mpeg;base64,${audioStream.toString('base64')}`,
       };
     } catch (error) {
-      this.logger.error(
-        'Error processing input or retrieving audio:',
-
-        error,
-      );
-
+      this.logger.error('Error processing input or retrieving audio:', error);
       throw new InternalServerErrorException(
         'Failed to process input and retrieve audio.',
       );
